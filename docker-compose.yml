@@ -1,4 +1,3 @@
-
 version: '3.8'
 services:
   app1:
@@ -11,15 +10,17 @@ services:
       - app1/.env
     depends_on:
       - db1
+    networks:
+      - my-custom-network
 
   db1:
     image: mysql:5.7
-    ports:
-      - "3306:3306"
     env_file:
       - app1/.env
     volumes:
-      - db-data:/var/lib/mysql
+      - db1-data:/var/lib/mysql
+    networks:
+      - my-custom-network
 
   app2:
     build: app2
@@ -31,15 +32,22 @@ services:
       - app2/.env
     depends_on:
       - db2
+    networks:
+      - my-custom-network
 
   db2:
     image: mysql:5.7
-    ports:
-      - "3307:3306"
     env_file:
       - app2/.env
     volumes:
-      - db-data:/var/lib/mysql
+      - db2-data:/var/lib/mysql
+    networks:
+      - my-custom-network
 
 volumes:
-  db-data:
+  db1-data:
+  db2-data:
+
+networks:
+  my-custom-network:
+    driver: bridge
