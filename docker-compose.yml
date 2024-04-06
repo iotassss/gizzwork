@@ -1,0 +1,45 @@
+
+version: '3.8'
+services:
+  app1:
+    build: app1
+    ports:
+      - "8001:80"
+    volumes:
+      - ./app1:/usr/src/app
+    env_file:
+      - app1/.env
+    depends_on:
+      - db1
+
+  db1:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    env_file:
+      - app1/.env
+    volumes:
+      - db-data:/var/lib/mysql
+
+  app2:
+    build: app2
+    ports:
+      - "8002:80"
+    volumes:
+      - ./app2:/usr/src/app
+    env_file:
+      - app2/.env
+    depends_on:
+      - db2
+
+  db2:
+    image: mysql:5.7
+    ports:
+      - "3307:3306"
+    env_file:
+      - app2/.env
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
