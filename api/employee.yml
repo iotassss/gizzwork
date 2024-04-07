@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Swagger Petstore - OpenAPI 3.0
+  description: 社員情報管理API
+servers:
+  - url: http://localhosot:8001/api/v1
+tags:
+  - name: Employee
+    description: Everything about your Pets
+paths:
+  /employees:
+    get:
+      tags:
+        - Employee
+      summary: List all employees
+      operationId: listEmployees
+      responses:
+        '200':
+          description: A list of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+                example:
+                  - employee_id: 550e8400-e29b-41d4-a716-446655440001
+                    email: taro@gmail.com
+                    first_name: Taro
+                    last_name: Yamada
+                    role: Manager
+                  - employee_id: 550e8400-e29b-41d4-a716-446655440002
+                    email: jiro@gmail.com
+                    first_name: Jiro
+                    last_name: Tanaka
+      security:
+        - api_key: []
+    post:
+      tags:
+        - Employee
+      summary: Create a new employee
+      operationId: createEmployee
+      requestBody:
+        description: Employee object that needs to be added to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+      responses:
+        '201':
+          description: Employee created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+      security:
+        - api_key: []
+  /employees/{employeeId}:
+    get:
+      tags:
+        - Employee
+      summary: Find employee by ID
+      description: Returns a single employee
+      operationId: getEmployeeById
+      parameters:
+        - $ref: '#/components/parameters/employeeId'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+      security:
+        - api_key: []
+    put:
+      tags:
+        - Employee
+      summary: Update an existing employee
+      operationId: updateEmployee
+      parameters:
+        - $ref: '#/components/parameters/employeeId'
+      requestBody:
+        description: Employee object that needs to be added to the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        required: true
+      responses:
+        '200':
+          description: Employee updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Employee not found
+      security:
+        - api_key: []
+    delete:
+      tags:
+        - Employee
+      summary: Delete an employee
+      operationId: deleteEmployee
+      parameters:
+        - $ref: '#/components/parameters/employeeId'
+      responses:
+        '204':
+          description: Employee deleted
+        '404':
+          description: Employee not found
+      security:
+        - api_key: []
+components:
+  schemas:
+    Employee:
+      type: object
+      required:
+        - employee_id
+      properties:
+        employee_id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
+          type: string
+  parameters:
+    employeeId:
+      name: employeeId
+      in: path
+      description: ID of employee to return
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBodies:
+    Employee:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+              - first_name
+              - last_name
+            properties:
+              email:
+                type: string
+                format: email
+              first_name:
+                type: string
+              last_name:
+                type: string
+              role:
+                type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-KEY
+      in: header

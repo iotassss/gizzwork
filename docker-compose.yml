@@ -1,0 +1,104 @@
+version: '3.8'
+services:
+
+# -----------------------------------------------------
+
+  employee:
+    build: ./employee
+    ports:
+      - "8001:80"
+    volumes:
+      - ./employee:/usr/src/app
+    env_file:
+      - employee/.env
+    depends_on:
+      - employee-db
+    networks:
+      - gizzwork-network
+
+  employee-db:
+    image: mysql:5.7
+    env_file:
+      - employee-db/.env
+    volumes:
+      - employee-db-data:/var/lib/mysql
+    networks:
+      - gizzwork-network
+
+# -----------------------------------------------------
+
+  # console:
+  #   build: ./console
+  #   ports:
+  #     - "8002:80"
+  #   volumes:
+  #     - ./console:/usr/src/app
+  #   env_file:
+  #     - console/.env
+  #   depends_on:
+  #     - console-db
+  #   networks:
+  #     - gizzwork-network
+
+  # console-db:
+  #   image: mysql:5.7
+  #   env_file:
+  #     - console-db/.env
+  #   volumes:
+  #     - console-db-data:/var/lib/mysql
+  #   networks:
+  #     - gizzwork-network
+
+# -----------------------------------------------------
+
+  # yukyu:
+  #   build: ./yukyu
+  #   env_file:
+  #     - yukyu/.env
+  #   depends_on:
+  #     - yukyu-db
+  #   networks:
+  #     - gizzwork-network
+
+  # yukyu-db:
+  #   image: mysql:5.7
+  #   env_file:
+  #     - yukyu-db/.env
+  #   volumes:
+  #     - yukyu-db-data:/var/lib/mysql
+  #   networks:
+  #     - gizzwork-network
+
+# -----------------------------------------------------
+
+  # notification:
+  #   build: ./notification
+  #   volumes:
+  #     - ./notification:/usr/src/app
+  #   env_file:
+  #     - notification/.env
+  #   depends_on:
+  #     - notification-db
+  #   networks:
+  #     - gizzwork-network
+
+  # notification-db:
+  #   image: mysql:5.7
+  #   env_file:
+  #     - notification-db/.env
+  #   volumes:
+  #     - notification-db-data:/var/lib/mysql
+  #   networks:
+  #     - gizzwork-network
+
+# -----------------------------------------------------
+
+volumes:
+  employee-db-data:
+  # console-db-data:
+  # yukyu-db-data:
+  # notification-db-data:
+
+networks:
+  gizzwork-network:
+    driver: bridge
