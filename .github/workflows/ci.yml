@@ -5,9 +5,9 @@ name: Go
 
 on:
   push:
-    branches: [ "main", "develop", "feature/*", "sandbox" ]
+    branches: [ "main", "develop", "sandbox" ]
   pull_request:
-    branches: [ "main", "develop", "feature/*", "sandbox" ]
+    branches: [ "main", "develop", "sandbox" ]
 
 jobs:
 
@@ -29,7 +29,7 @@ jobs:
         cd employee
         go build -v ./...
 
-    - name: Test
+    - name: Test Employee
       run: |
         cd employee
         go test -v ./...
