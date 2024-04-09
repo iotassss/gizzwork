@@ -33,3 +33,13 @@ jobs:
       run: |
         cd employee
         go test -v ./...
+
+    - name: Build Console
+      run: |
+        cd console
+        go build -v ./...
+
+    - name: Test Console
+      run: |
+        cd console
+        go test -v ./...

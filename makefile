@@ -29,17 +29,38 @@ generate2:
 		--additional-properties withGoMod=false \
 		--openapi-generator-ignore-list api/*,test/*,.gitignore,.travis.yml,git_push.sh
 
+# -------------------------------------------------------------------------------------------------------
+
 generate-employee-server:
 	docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
 		-i /local/api/employee.yml \
 		-g go-server \
 		-o /local/employee \
 		-t /local/employee/templates \
-		--additional-properties gitUserId=iotassss \
 		--additional-properties packageName=api
 
-# generate-employee-client-package:
 generate-employee-server-templates:
 	docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli author template \
 		-g go-server \
 		-o /local/employee/templates
+
+# generate-employee-client-package:
+
+# -------------------------------------------------------------------------------------------------------
+
+generate-console-server:
+	docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli generate \
+		-i /local/api/console.yml \
+		-g go-server \
+		-o /local/console \
+		-t /local/console/templates \
+		--additional-properties packageName=api
+
+generate-console-server-templates:
+	docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli author template \
+		-g go-server \
+		-o /local/console/templates
+
+# generate-console-client-package:
+
+# -------------------------------------------------------------------------------------------------------
