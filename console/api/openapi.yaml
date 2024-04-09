@@ -1,0 +1,176 @@
+openapi: 3.0.3
+info:
+  description: 社員情報管理API
+  title: Gizzwork/console - OpenAPI 3.0
+  version: 1.0.0
+servers:
+- url: http://localhosot:8001/api/v1
+tags:
+- description: Everything about your Pets
+  name: User
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: A list of users
+      security:
+      - api_key: []
+      summary: List all Users
+      tags:
+      - User
+    post:
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User object that needs to be added to the store
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: User created
+      security:
+      - api_key: []
+      summary: Create a new user
+      tags:
+      - User
+  /users/{userId}:
+    delete:
+      operationId: deleteUser
+      parameters:
+      - description: ID of user to return
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: User deleted
+        "404":
+          description: User not found
+      security:
+      - api_key: []
+      summary: Delete an user
+      tags:
+      - User
+    get:
+      description: Returns a single user
+      operationId: getUserById
+      parameters:
+      - description: ID of user to return
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: successful operation
+        "404":
+          description: User not found
+      security:
+      - api_key: []
+      summary: Find user by ID
+      tags:
+      - User
+    put:
+      operationId: updateUser
+      parameters:
+      - description: ID of user to return
+        explode: false
+        in: path
+        name: userId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        description: User object that needs to be added to the store
+        required: true
+      responses:
+        "200":
+          description: User updated
+        "404":
+          description: User not found
+      security:
+      - api_key: []
+      summary: Update an existing user
+      tags:
+      - User
+components:
+  parameters:
+    userId:
+      description: ID of user to return
+      explode: false
+      in: path
+      name: userId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  requestBodies:
+    User:
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                format: email
+                type: string
+              password:
+                format: password
+                type: string
+              name:
+                type: string
+            type: object
+  schemas:
+    User:
+      example:
+        user_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: name
+        email: email
+      properties:
+        user_id:
+          format: uuid
+          type: string
+        email:
+          format: email
+          type: string
+        name:
+          type: string
+      type: object
+  securitySchemes:
+    api_key:
+      in: header
+      name: X-API-KEY
+      type: apiKey

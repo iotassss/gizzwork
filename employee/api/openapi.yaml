@@ -1,0 +1,203 @@
+openapi: 3.0.3
+info:
+  description: 社員情報管理API
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.0
+servers:
+- url: http://localhosot:8001/api/v1
+tags:
+- description: Everything about your Pets
+  name: Employee
+paths:
+  /employees:
+    get:
+      operationId: listEmployees
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                example:
+                - employee_id: 550e8400-e29b-41d4-a716-446655440001
+                  email: taro@gmail.com
+                  first_name: Taro
+                  last_name: Yamada
+                  role: Manager
+                - employee_id: 550e8400-e29b-41d4-a716-446655440002
+                  email: jiro@gmail.com
+                  first_name: Jiro
+                  last_name: Tanaka
+                items:
+                  $ref: '#/components/schemas/Employee'
+                type: array
+          description: A list of employees
+      security:
+      - api_key: []
+      summary: List all employees
+      tags:
+      - Employee
+    post:
+      operationId: createEmployee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        description: Employee object that needs to be added to the store
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: Employee created
+      security:
+      - api_key: []
+      summary: Create a new employee
+      tags:
+      - Employee
+  /employees/{employeeId}:
+    delete:
+      operationId: deleteEmployee
+      parameters:
+      - description: ID of employee to return
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: Employee deleted
+        "404":
+          description: Employee not found
+      security:
+      - api_key: []
+      summary: Delete an employee
+      tags:
+      - Employee
+    get:
+      description: Returns a single employee
+      operationId: getEmployeeById
+      parameters:
+      - description: ID of employee to return
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: successful operation
+        "404":
+          description: Employee not found
+      security:
+      - api_key: []
+      summary: Find employee by ID
+      tags:
+      - Employee
+    put:
+      operationId: updateEmployee
+      parameters:
+      - description: ID of employee to return
+        explode: false
+        in: path
+        name: employeeId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Employee'
+        description: Employee object that needs to be added to the store
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+          description: Employee updated
+        "404":
+          description: Employee not found
+      security:
+      - api_key: []
+      summary: Update an existing employee
+      tags:
+      - Employee
+components:
+  parameters:
+    employeeId:
+      description: ID of employee to return
+      explode: false
+      in: path
+      name: employeeId
+      required: true
+      schema:
+        format: uuid
+        type: string
+      style: simple
+  requestBodies:
+    Employee:
+      content:
+        application/json:
+          schema:
+            properties:
+              email:
+                format: email
+                type: string
+              first_name:
+                type: string
+              last_name:
+                type: string
+              role:
+                type: string
+            required:
+            - email
+            - first_name
+            - last_name
+            type: object
+  schemas:
+    Employee:
+      example:
+        role: role
+        employee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        last_name: last_name
+        first_name: first_name
+        email: email
+      properties:
+        employee_id:
+          format: uuid
+          type: string
+        email:
+          format: email
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
+          type: string
+      required:
+      - employee_id
+      type: object
+  securitySchemes:
+    api_key:
+      in: header
+      name: X-API-KEY
+      type: apiKey
